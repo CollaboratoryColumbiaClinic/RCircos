@@ -1,0 +1,78 @@
+---
+title: "RCircos Problem from Taiyi"
+author: "TianTan"
+date: "3/29/2017"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Problem 1:
+### Zoom in certain part of chromosome 15:
+
+```{r}
+library(RCircos)
+data(UCSC.HG19.Human.CytoBandIdeogram)
+
+zoomedIdeo <- RCircos.ZoomIn.Chromosome(
+  ideogram=UCSC.HG19.Human.CytoBandIdeogram,
+  chromosome="chr15", from=60087292, to=61087053,
+  zoom.in=50)
+
+RCircos.Set.Core.Components(zoomedIdeo, 
+                            chr.exclude=c("chr1", "chr2", "chr3", "chr4", 
+                                          "chr5", "chr6", "chr7", 
+                                          "chr8", "chr9", "chr10", "chr11", 
+                                          "chr12", "chr13", "chr14", 
+                                          "chr16", "chr17", "chr18", "chr19", 
+                                          "chr20", "chr21", "chr22", 
+                                          "chrX", "chrY"),
+                            tracks.inside=10, 
+                            tracks.outside=0)
+
+RCircos.Set.Plot.Area()
+RCircos.Chromosome.Ideogram.Plot()
+
+```
+
+## Problem 2:
+### Reset the parameters of RCircos:
+### Increase the number of gene labels displayed per chromosome
+
+You can also embed plots, for example:
+
+```{r}
+
+library(RCircos)
+data(UCSC.HG19.Human.CytoBandIdeogram)
+
+RCircos.Set.Core.Components( cyto.info=UCSC.HG19.Human.CytoBandIdeogram,
+                             chr.exclude=c("chr1", "chr2", "chr3", "chr4", 
+                                          "chr5", "chr6", "chr7", 
+                                          "chr8", "chr9", "chr10", "chr11", 
+                                          "chr12", "chr13", "chr14", 
+                                          "chr16", "chr17", "chr18", "chr19", 
+                                          "chr20", "chr21", "chr22", 
+                                          "chrX", "chrY"),
+                             tracks.inside=10, tracks.outside=0) 
+
+ideo <- RCircos.Get.Plot.Ideogram() 
+rows <- which(ideo$BandColor=="red")
+ideo$BandColor[rows] <- "green" 
+RCircos.Reset.Plot.Ideogram(ideo) 
+
+#params <- RCircos.Get.Plot.Parameters() 
+#params$base.per.unit <- 6000 
+#RCircos.Reset.Plot.Paramters(params) 
+
+positions <- RCircos.Get.Plot.Positions(); 
+positions[1, 3] <- 0; 
+RCircos.Reset.Plot.Positions(positions)
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
